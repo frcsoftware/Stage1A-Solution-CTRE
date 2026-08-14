@@ -35,15 +35,16 @@ public class Robot extends OpModeRobot {
   public TalonFX rightLeader = new TalonFX(rightLeaderID, CANBus.systemcore(0));
   private TalonFX rightFollower = new TalonFX(3, CANBus.systemcore(0));
 
-  public TalonFX intakeLauncher = new TalonFX(4, CANBus.systemcore(0));
-  public TalonFX feeder = new TalonFX(5, CANBus.systemcore(0));
-
-  private OnboardIMU imu = new OnboardIMU(MountOrientation.FLAT);
-
   public final DifferentialDrive drivetrain =
       new DifferentialDrive(leftLeader::setThrottle, rightLeader::setThrottle);
 
+  private OnboardIMU imu = new OnboardIMU(MountOrientation.FLAT);
+
   private DrivetrainSim drivetrainSim = new DrivetrainSim(leftLeader, rightLeader);
+
+  public TalonFX intakeLauncher = new TalonFX(4, CANBus.systemcore(0));
+  public TalonFX feeder = new TalonFX(5, CANBus.systemcore(0));
+
   private SingleFlywheelSim intakeLauncherSim =
       new SingleFlywheelSim(intakeLauncher, "IntakeLauncher");
   private SingleFlywheelSim feederSim = new SingleFlywheelSim(feeder, "Feeder");
@@ -56,14 +57,18 @@ public class Robot extends OpModeRobot {
     var leftConfig = new TalonFXConfiguration();
     leftConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
     leftLeader.getConfigurator().apply(leftConfig);
+    leftFollower.getConfigurator().apply(leftConfig);
+
+    leftFollower.setControl(new Follower(leftLeaderID, MotorAlignmentValue.Aligned));
 
     var rightConfig = new TalonFXConfiguration();
     rightConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
     rightLeader.getConfigurator().apply(rightConfig);
+    rightFollower.getConfigurator().apply(rightConfig);
 
-    leftFollower.setControl(new Follower(leftLeaderID, MotorAlignmentValue.Aligned));
     rightFollower.setControl(new Follower(rightLeaderID, MotorAlignmentValue.Aligned));
   }
+
 
   @Override
   public void simulationPeriodic() {
