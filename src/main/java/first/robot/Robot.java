@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import first.robot.simulation.DrivetrainSim;
+import first.robot.simulation.FuelSim;
 import first.robot.simulation.SingleFlywheelSim;
 import org.wpilib.drive.DifferentialDrive;
 import org.wpilib.framework.OpModeRobot;
@@ -48,6 +49,7 @@ public class Robot extends OpModeRobot {
   private SingleFlywheelSim intakeLauncherSim = SingleFlywheelSim.forIntakeLauncher(intakeLauncher);
   private SingleFlywheelSim feederSim = SingleFlywheelSim.forFeeder(feeder);
 
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -74,5 +76,7 @@ public class Robot extends OpModeRobot {
     drivetrainSim.periodic();
     intakeLauncherSim.periodic();
     feederSim.periodic();
+
+    FuelSim.periodic();
   }
 }

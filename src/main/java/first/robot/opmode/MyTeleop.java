@@ -27,7 +27,7 @@ public class MyTeleop extends PeriodicOpMode {
     robot.drivetrain.arcadeDrive(-xboxController.getLeftY(), xboxController.getRightX());
 
     if (xboxController.getRightBumperButton()) {
-      // shoot
+      // launch
       robot.intakeLauncher.setThrottle(0.9);
       robot.feeder.setThrottle(0.75);
 
