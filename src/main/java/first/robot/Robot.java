@@ -28,26 +28,25 @@ import org.wpilib.hardware.imu.OnboardIMU.MountOrientation;
  */
 public class Robot extends OpModeRobot {
 
-  private final int leftLeaderID = 0;
-  public TalonFX leftLeader = new TalonFX(leftLeaderID, CANBus.systemcore(0));
-  private TalonFX leftFollower = new TalonFX(1, CANBus.systemcore(0));
+  private final TalonFX leftLeader = new TalonFX(0, CANBus.systemcore(0));
+  private final TalonFX leftFollower = new TalonFX(1, CANBus.systemcore(0));
 
-  private final int rightLeaderID = 2;
-  public TalonFX rightLeader = new TalonFX(rightLeaderID, CANBus.systemcore(0));
-  private TalonFX rightFollower = new TalonFX(3, CANBus.systemcore(0));
+  private final TalonFX rightLeader = new TalonFX(2, CANBus.systemcore(0));
+  private final TalonFX rightFollower = new TalonFX(3, CANBus.systemcore(0));
 
   public final DifferentialDrive drivetrain =
       new DifferentialDrive(leftLeader::setThrottle, rightLeader::setThrottle);
 
-  private OnboardIMU imu = new OnboardIMU(MountOrientation.FLAT);
+  private final OnboardIMU imu = new OnboardIMU(MountOrientation.FLAT);
 
-  private DrivetrainSim drivetrainSim = new DrivetrainSim(leftLeader, rightLeader);
+  private final DrivetrainSim drivetrainSim = new DrivetrainSim(leftLeader, rightLeader);
 
-  public TalonFX intakeLauncher = new TalonFX(4, CANBus.systemcore(0));
-  public TalonFX feeder = new TalonFX(5, CANBus.systemcore(0));
+  public final TalonFX intakeLauncher = new TalonFX(4, CANBus.systemcore(0));
+  public final TalonFX feeder = new TalonFX(5, CANBus.systemcore(0));
 
-  private SingleFlywheelSim intakeLauncherSim = SingleFlywheelSim.forIntakeLauncher(intakeLauncher);
-  private SingleFlywheelSim feederSim = SingleFlywheelSim.forFeeder(feeder);
+  private final SingleFlywheelSim intakeLauncherSim =
+      SingleFlywheelSim.forIntakeLauncher(intakeLauncher);
+  private final SingleFlywheelSim feederSim = SingleFlywheelSim.forFeeder(feeder);
 
 
   /**
@@ -55,19 +54,19 @@ public class Robot extends OpModeRobot {
    * initialization code.
    */
   public Robot() {
-    var leftConfig = new TalonFXConfiguration();
+    TalonFXConfiguration leftConfig = new TalonFXConfiguration();
     leftConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
     leftLeader.getConfigurator().apply(leftConfig);
     leftFollower.getConfigurator().apply(leftConfig);
 
-    leftFollower.setControl(new Follower(leftLeaderID, MotorAlignmentValue.Aligned));
+    leftFollower.setControl(new Follower(leftLeader.getDeviceID(), MotorAlignmentValue.Aligned));
 
-    var rightConfig = new TalonFXConfiguration();
+    TalonFXConfiguration rightConfig = new TalonFXConfiguration();
     rightConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
     rightLeader.getConfigurator().apply(rightConfig);
     rightFollower.getConfigurator().apply(rightConfig);
 
-    rightFollower.setControl(new Follower(rightLeaderID, MotorAlignmentValue.Aligned));
+    rightFollower.setControl(new Follower(rightLeader.getDeviceID(), MotorAlignmentValue.Aligned));
   }
 
 
