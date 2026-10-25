@@ -74,9 +74,11 @@ public class Robot extends OpModeRobot {
   @Override
   public void simulationPeriodic() {
     drivetrainSim.periodic();
+
     intakeLauncherSim.periodic();
     feederSim.periodic();
 
     FuelSim.periodic();
   }
+
 }
